@@ -1,4 +1,4 @@
-package com.app
+package com.natanaelaquino.aquinofinanceiro
 
 import android.os.Build
 import android.os.Bundle

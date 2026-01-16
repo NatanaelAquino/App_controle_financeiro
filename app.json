@@ -1,7 +1,24 @@
 {
   "expo": {
-    "name": "App",
-    "slug": "App",
-    "version": "1.0.0"
+    "name": "Aquino Financeiro",
+    "slug": "aquino-financeiro",
+    "scheme": "aquinofinanceiro",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.natanaelaquino.aquinofinanceiro",
+      "edgeToEdgeEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.natanaelAquino.AquinoFinanceiro",
+      "icon": "./assets/ios-icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ]
   }
 }
