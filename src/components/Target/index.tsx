@@ -1,7 +1,8 @@
-import { View,Text,  TouchableOpacity, TouchableOpacityProps} from "react-native";
+import { View, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { styles } from "./styles";
+import { colors } from "@/theme";
 
 export type TargetProps = {
     id?: string;
@@ -14,15 +15,15 @@ type Props = TouchableOpacityProps & {
     data: TargetProps;
 }
 
-export function Target({data,...rest}: Props) {
+export function Target({ data, ...rest }: Props) {
     return (
         <TouchableOpacity style={styles.container} {...rest}>
             <View style={styles.content}>
                 <Text style={styles.name} numberOfLines={1}>{data.name}</Text>
                 <Text style={styles.status}>{data.percentage}• {data.current} de {data.target}</Text>
-                <MaterialIcons name="chevron-right" size={24} color="white"/>
-            
             </View>
+            <MaterialIcons name="chevron-right" size={24}  />
+
         </TouchableOpacity>
     )
 }   
