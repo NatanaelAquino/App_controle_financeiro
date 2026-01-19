@@ -26,8 +26,7 @@ export default function Layout() {
     }
     return (
         <Suspense fallback={<Loading />}>
-            <SQLiteProvider
-                databaseName="target.db"
+      <SQLiteProvider databaseName="meu_novo_banco_v2.db"
                 onInit={migrate}
                 useSuspense
             >
