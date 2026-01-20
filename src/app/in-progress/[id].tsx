@@ -1,18 +1,20 @@
-import { View, } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { Alert, View, } from "react-native";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useState } from "react";
+
 import { PageHeader } from "@/components/PageHeader/indes";
 import { Progress } from "@/components/Progress";
 import { Button } from "@/components/Butto";
 import { List } from "@/components/List/indes";
 import { Transaction, TransactionProps } from "@/components/Transaction";
-import { TransactionType } from "@/utils/transactionTypes";
-import { use } from "react";
+import { Loading } from "@/components/Loading";
 
-const data = {
-    current: "R$ 580,00",
-    target: "R$ 1.790,00",
-    percentage: 25
-}
+
+
+import { TransactionType } from "@/utils/transactionTypes";
+import { useTargetDatabase } from "@/database/useTargetDatabase";
+import { numberToCurrency } from "@/utils/numberTocurrency";
+
 
 const Transactions: TransactionProps[] = [
     {
@@ -32,13 +34,57 @@ const Transactions: TransactionProps[] = [
 ]
 
 export default function InProgress() {
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [details, setDetails] = useState({
+        name: "",
+        current: "R$ 0,00",
+        percentage: "R$ 0,00",
+        target: 0
+    })
+
     const params = useLocalSearchParams<TransactionType>();
+    const targetDatabase = useTargetDatabase();
+
+
+    async function fectDetails() {
+        try {
+            const response = await targetDatabase.show(Number(params.id));
+            setDetails({
+                name: response.name,
+                current: numberToCurrency(response.current),
+                percentage: numberToCurrency(response.percentage),
+                target: response.amount
+            })
+        } catch (error) {
+            Alert.alert('Erro', 'Erro ao carregar meta');
+        }
+    }
+
+    async function  fetchData() {
+        const fectDetailsPromise =  fectDetails();
+
+        await Promise.all([fectDetailsPromise]);
+        setIsLoading(false);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData()
+        }, [])
+    )
+
+    if(isLoading) return <Loading />
+
     return (
         <View style={{ flex: 1, padding: 24, gap: 24 }}>
-            <PageHeader title="Meta em andamento"
+            <PageHeader title={details.name}
                 rightButton={{ icon: "edit", onPress: () => { } }}
             />
-            <Progress data={data} />
+            <Progress data={{
+                current: details.current, target:
+                    String(details.target), percentage: Number(details.percentage)
+            }} />
             <List
                 title="Transções" data={Transactions}
                 renderItem={({ item }) => (

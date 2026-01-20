@@ -6,10 +6,10 @@ import { HomeHeader } from "@/components/HomeHeader";
 import { List } from "@/components/List/indes";
 import { Target, TargetProps } from "@/components/Target";
 import { Button } from "@/components/Butto";
-
-import { useTargetDatabase } from "@/database/useTargetDatabase"
 import { Loading } from "@/components/Loading";
 
+import { useTargetDatabase } from "@/database/useTargetDatabase"
+import { numberToCurrency } from "@/utils/numberTocurrency";
 
 const summary = {
     total: "R$ 2680,00",
@@ -27,9 +27,9 @@ export default function Index() {
             return response.map((target) => ({
                 id: String(target.id),
                 name: target.name,
-                current: String(target.current),
+                current: numberToCurrency(target.current),
                 percentage: target.percentage.toFixed(0) + "%",
-                target: String(target.amount),
+                target: numberToCurrency(target.amount),
             }));
 
         } catch (error) {
