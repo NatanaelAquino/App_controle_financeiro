@@ -4,7 +4,7 @@ import { Input } from "@/components/Input";
 import { PageHeader } from "@/components/PageHeader/indes";
 import { useTargetDatabase } from "@/database/useTargetDatabase";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Alert } from "react-native";
 
 export default function Target() {
@@ -22,10 +22,28 @@ export default function Target() {
         setIsProcessing(true);
 
         if (params.id) {
-            //updade   
+            //updade  
+            update()
         } else {
             //create
             create();
+        }
+    }
+
+    async function update() {
+        try {
+            await targetDatabase.update({ id: Number(params.id), name, amount });
+            Alert.alert('Sucesso', 'Meta atualizada com sucesso!',
+                [{
+                    text: 'OK',
+                    onPress: () => router.back()
+
+                }]
+            );
+        } catch (error) {
+            Alert.alert('Erro', 'Erro ao atualizar meta');
+            console.log(error);
+            setIsProcessing(false);
         }
     }
     async function create() {
@@ -44,7 +62,20 @@ export default function Target() {
         }
     }
 
-    
+    async function fetchDatails(id: number) {
+        try {
+            const response = await targetDatabase.show(id);
+            setName(response.name);
+            setAmount(response.amount);
+        } catch (error) {
+            Alert.alert('Erro', 'Erro ao carregar meta');
+        }
+    }
+    useEffect(() => {
+        if (params.id) {
+            fetchDatails(Number(params.id));
+        }
+    }, [params.id]);
 
     return (
         <View style={{ flex: 1, padding: 24 }}>
