@@ -53,7 +53,7 @@ export default function InProgress() {
             setDetails({
                 name: response.name,
                 current: numberToCurrency(response.current),
-                percentage: numberToCurrency(response.percentage),
+                percentage: String(response.percentage),
                 target: response.amount
             })
         } catch (error) {
@@ -74,12 +74,15 @@ export default function InProgress() {
         }, [])
     )
 
+    console.log(details)
     if(isLoading) return <Loading />
 
     return (
         <View style={{ flex: 1, padding: 24, gap: 24 }}>
             <PageHeader title={details.name}
-                rightButton={{ icon: "edit", onPress: () => { } }}
+                rightButton={{ icon: "edit", onPress: () => {
+                    router.navigate(`/target?id=${params.id}`)
+                 } }}
             />
             <Progress data={{
                 current: details.current, target:

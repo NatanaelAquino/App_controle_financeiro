@@ -6,6 +6,7 @@ export async function migrate(database: SQLiteDatabase) {
 
   // 2. Cria as tabelas na ordem correta
   await database.execAsync(`
+
     CREATE TABLE IF NOT EXISTS targets (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
