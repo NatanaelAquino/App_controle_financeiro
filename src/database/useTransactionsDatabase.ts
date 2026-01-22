@@ -9,7 +9,16 @@ export type TransactionCreate = {
 
 }
 
-export function useTargetDatabase() {
+export type TransactionResponse = {
+    id: number;
+    target_id: number;
+    amount: number;
+    observation?: string;
+    created_at: Date;
+    updated_at: Date;
+}
+
+export function useTransactionsDatabase() {
     const database = useSQLiteContext();
 
     async function create(data: TransactionCreate) {
@@ -22,7 +31,18 @@ export function useTargetDatabase() {
             $observation: data.observation
         });
     }
+    async function listByTargetId(id: number) {
+        return database.getAllAsync<TransactionResponse>(`
+            SELECT id, target_id, amount, observation, create_at, update_at 
+            FROM transactions WHERE target_id = ${id};
+            ORDER BY create_at DESC
+        `);
+    }
 
+    async function removeByTargetId(id: number) {
 
-    return { create };
+        await database.runAsync(`
+        DELETE FROM transactions WHERE id = ? `, id);
+    }
+    return { create, listByTargetId, removeByTargetId };
 }

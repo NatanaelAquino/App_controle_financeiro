@@ -6,7 +6,7 @@ import { styles } from "./styles";
 import { colors } from "@/theme";
 export type TransactionProps = {
     id: string;
-    value: string;
+    amount: string;
     date: string;
     description?: string;
     type: TransactionType;
@@ -33,7 +33,7 @@ export function Transaction({ data, onRemove }: Props) {
                 }
             />
             <View style={styles.info}>
-                <Text style={styles.value}>{data.value}</Text>
+                <Text style={styles.value}>{data.amount}</Text>
                 <Text style={styles.description} numberOfLines={1}>
                     {data.date} {data.description && `• ${data.description}`}
                 </Text>
